@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silk Coon Counting</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #b2f0ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2px;
+            margin-top: -5px;
+        }
+        header h1 {
+            color: #18bda1;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 80%;
+            background-color: #ffffff;
+            box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .video-feed {
+            border: 2px solid #007acc;
+            width: 640px;
+            height: 480px;
+            border-radius: 8px;
+        }
+        .panel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+        .panels {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 5px;
+        }
+        .counter-panel, .calculate-panel, .price-panel {
+            background-color: #e6f7ff;
+            border: 2px solid #007acc;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .counter-panel, .calculate-panel {
+            width: 50%;
+        }
+        .price-panel {
+            width: 97%;
+            height: 210px;
+            margin-top: 10px;
+        }
+        .counter-panel h2, .calculate-panel h2, .price-panel h2 {
+            color: #18bda1;
+            margin-top: -5px;
+        }
+        .counter-panel p, .calculate-panel p, .price-panel p {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #005b99;
+        }
+        .reset-button, .calculate-panel button, .price-panel button {
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .reset-button:hover, .calculate-panel button:hover, .price-panel button:hover {
+            background-color: #005b99;
+        }
+        /* Chiều rộng của ô nhập */
+        .calculate-panel input, .price-panel input {
+            margin-right: 10px;
+            width: 130px; 
+            height: 25px; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kén tằm</h1>
+    </header>
+    <div class="container">
+        <div class="video-feed" id="videoFeed">
+            <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+        </div>
+        <div class="panel-container">
+            <div class="panels">
+                <div class="counter-panel">
+                    <h2>Bảng đếm</h2>
+                    <p>Kén nâu: <span id="brownCount">0</span></p>
+                    <p>Kén vàng: <span id="yellowCount">0</span></p>
+                    <p>Kén trắng: <span id="whiteCount">0</span></p>
+                    <button class="reset-button" onclick="resetCounts()">Đặt lại</button>
+                </div>
+                <div class="calculate-panel">
+                    <h2>Thống kê</h2>
+                    <input type="text" id="weightInput" placeholder="Nhập (kg)" oninput="formatAndUpdate(this)">
+                    <button onclick="calculatePercentage()">Tính toán</button>
+                    <p id="results"></p>
+                </div>
+            </div>
+            <div class="price-panel">
+                <h2>Thành tiền</h2>
+                <input type="text" id="priceBrown" placeholder="Giá kén nâu (VNĐ)" oninput="formatAndUpdate(this)">
+                <input type="text" id="priceYellow" placeholder="Giá kén vàng (VNĐ)" oninput="formatAndUpdate(this)">
+                <input type="text" id="priceWhite" placeholder="Giá kén trắng (VNĐ)" oninput="formatAndUpdate(this)">
+                <button onclick="calculatePrice()">Tính tiền</button>
+                <p id="priceResults"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function resetCounts() {
+            fetch('/reset_counts', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('brownCount').textContent = '0';
+                        document.getElementById('yellowCount').textContent = '0';
+                        document.getElementById('whiteCount').textContent = '0';
+                    }
+                });
+        }
+
+        function updateCounts(brown, yellow, white) {
+            document.getElementById('brownCount').textContent = brown;
+            document.getElementById('yellowCount').textContent = yellow;
+            document.getElementById('whiteCount').textContent = white;
+        }
+
+        function fetchCounts() {
+            fetch('/get_counts')
+                .then(response => response.json())
+                .then(data => {
+                    updateCounts(data.brown, data.yellow, data.white);
+                });
+        }
+
+        function calculatePercentage() {
+            const weight = parseFloat(document.getElementById('weightInput').value.replace(/,/g, ''));
+            fetch('/calculate_percentage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ weight })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('results').textContent = data.error;
+                } else {
+                    document.getElementById('results').innerHTML = `
+                        Kén nâu: ${data.brown_percentage.toFixed(2)}% (${data.brown_weight.toFixed(2)} kg)<br>
+                        Kén vàng: ${data.yellow_percentage.toFixed(2)}% (${data.yellow_weight.toFixed(2)} kg)<br>
+                        Kén trắng: ${data.white_percentage.toFixed(2)}% (${data.white_weight.toFixed(2)} kg)
+                    `;
+                }
+            });
+        }
+
+        function calculatePrice() {
+            const weight = parseFloat(document.getElementById('weightInput').value.replace(/,/g, ''));
+            const priceBrown = parseFloat(document.getElementById('priceBrown').value.replace(/,/g, ''));
+            const priceYellow = parseFloat(document.getElementById('priceYellow').value.replace(/,/g, ''));
+            const priceWhite = parseFloat(document.getElementById('priceWhite').value.replace(/,/g, ''));
+
+            fetch('/calculate_price', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ weight, price_brown: priceBrown, price_yellow: priceYellow, price_white: priceWhite })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('priceResults').textContent = data.error;
+                } else {
+                    document.getElementById('priceResults').innerHTML = `
+                        Giá kén nâu: ${formatNumber(data.brown_price)} VNĐ<br>
+                        Giá kén vàng: ${formatNumber(data.yellow_price)} VNĐ<br>
+                        Giá kén trắng: ${formatNumber(data.white_price)} VNĐ<br>
+                        Tổng số tiền: ${formatNumber(data.total_price)} VNĐ
+                    `;
+                }
+            });
+        }
+
+        function formatNumber(value) {
+            return Number(value).toLocaleString('en-US');
+        }
+
+        function formatAndUpdate(input) {
+            // Loại bỏ tất cả ký tự không phải số
+            let value = input.value.replace(/[^0-9]/g, '');
+            input.value = formatNumber(value);
+
+            // Cập nhật giá trị cho phép tính toán
+            updateCalculation();
+        }
+
+        function updateCalculation() {
+            const weight = parseFloat(document.getElementById('weightInput').value.replace(/,/g, '')) || 0;
+            const priceBrown = parseFloat(document.getElementById('priceBrown').value.replace(/,/g, '')) || 0;
+            const priceYellow = parseFloat(document.getElementById('priceYellow').value.replace(/,/g, '')) || 0;
+            const priceWhite = parseFloat(document.getElementById('priceWhite').value.replace(/,/g, '')) || 0;
+
+            // Tính toán giá
+            if (weight > 0) {
+                const brown_price = weight * priceBrown;
+                const yellow_price = weight * priceYellow;
+                const white_price = weight * priceWhite;
+                const total_price = brown_price + yellow_price + white_price;
+
+                document.getElementById('priceResults').innerHTML = `
+                    Giá kén nâu: ${formatNumber(brown_price)} VNĐ<br>
+                    Giá kén vàng: ${formatNumber(yellow_price)} VNĐ<br>
+                    Giá kén trắng: ${formatNumber(white_price)} VNĐ<br>
+                    Tổng số tiền: ${formatNumber(total_price)} VNĐ
+                `;
+            }
+        }
+
+        setInterval(fetchCounts, 1000); 
+    </script>
+</body>
+</html>
