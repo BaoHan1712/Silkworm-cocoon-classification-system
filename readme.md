@@ -26,6 +26,12 @@ We use SolidWorks software to create the model for the classification and evalua
 
 <img src="images/img1.png" alt="System Image">
 
+i deloy model on JETSON ORIN NANO
+
+<h2>STEP MOTOR</h2>
+
+<img src="images\dongco.jpg" alt="System Image">
+
 <h2>HOW TO RUN</h2>
 
 ```python back_end.py```
