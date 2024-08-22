@@ -32,6 +32,14 @@ i deloy model on JETSON ORIN NANO
 
 <img src="images\dongco.jpg" alt="System Image">
 
-<h2>HOW TO RUN</h2>
+<h2>HOW TO RUN BACKEND</h2>
 
 ```python back_end.py```
+
+<h2>HOW TO RUN SERVO AND APP</h2>
+
+```python display.py```
+
+<h2>HOW TO RUN PYTHON</h2>
+
+```python main.py```
