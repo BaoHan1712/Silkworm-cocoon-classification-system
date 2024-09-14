@@ -34,7 +34,7 @@ i deloy model on JETSON ORIN NANO
 
 <h2>RESULT</h2>
 
-<video src="images\kq.mp4" controls style="max-width:100%; height:auto;"></video>
+IN  images
 
 
 
