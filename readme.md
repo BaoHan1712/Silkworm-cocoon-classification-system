@@ -34,8 +34,8 @@ i deloy model on JETSON ORIN NANO
 
 <h2>RESULT</h2>
 
-<video src="<video src="images\kq.mp4" controls style="max-width:100%; height:auto;"></video>
-" controls style="max-width:100%; height:auto;"></video>
+<video src="images\kq.mp4" controls style="max-width:100%; height:auto;"></video>
+
 
 
 <h2>HOW TO RUN BACKEND</h2>
