@@ -34,23 +34,8 @@ i deloy model on JETSON ORIN NANO
 
 <h2>RESULT</h2>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhúng Video</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="video-container">
-        <video controls>
-            <source src="kq.mp4" type="video/mp4">
-            Trình duyệt của bạn không hỗ trợ video.
-        </video>
-    </div>
-</body>
-</html>
+<video src="<video src="images\kq.mp4" controls style="max-width:100%; height:auto;"></video>
+" controls style="max-width:100%; height:auto;"></video>
 
 
 <h2>HOW TO RUN BACKEND</h2>
