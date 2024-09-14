@@ -32,6 +32,27 @@ i deloy model on JETSON ORIN NANO
 
 <img src="images\dongco.jpg" alt="System Image">
 
+<h2>RESULT</h2>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhúng Video</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-container">
+        <video controls>
+            <source src="kq.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ video.
+        </video>
+    </div>
+</body>
+</html>
+
+
 <h2>HOW TO RUN BACKEND</h2>
 
 ```python back_end.py```
