@@ -13,7 +13,7 @@ def auto_brown_mask(hsv_roi):
 
 cap = cv2.VideoCapture("images\kentam.MOV")  
 
-model = YOLO("model\ken_final.pt", task='detect')
+model = YOLO("model\ken_final.onnx", task='detect')
 
 classnames = ['ken']
 
