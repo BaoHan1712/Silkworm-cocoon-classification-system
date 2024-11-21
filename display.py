@@ -1,11 +1,7 @@
 import cv2
 from support.sort import Sort
 from ultralytics import YOLO
-<<<<<<< HEAD
 from support.utils import brown_mask, yellow_mask, format_number, calculate_frame_brightness
-=======
-from support.utils import brown_mask, yellow_mask, format_number
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 import math
 import numpy as np
 import serial
@@ -14,18 +10,13 @@ import threading
 import tkinter as tk
 from PIL import Image, ImageTk
 
-<<<<<<< HEAD
 # Kết nối với Arduino
-=======
-# Kết nối với Arduino qua cổng serial
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 arduino = serial.Serial(port='COM4', baudrate=9600)
 time.sleep(1)
 
 
 # Hàm thực hiện xử lý video và đếm
 def process_video():
-<<<<<<< HEAD
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     model = YOLO("model\ken_final.onnx", task='detect')
 
@@ -33,18 +24,6 @@ def process_video():
 # Theo dõi màu
     tracked_colors = {}
 
-=======
-    cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-    model = YOLO("model\ken60.onnx", task='detect')
-
-    classnames = []
-# Theo dõi màu
-    tracked_colors = {}
-
-    with open('class.txt', 'r') as f:
-        classnames = f.read().splitlines()
-
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
     tracker = Sort(max_age=35)
 
     # Line
@@ -65,11 +44,7 @@ def process_video():
         # Tạo mảng lưu thông tin đối tượng
         detections = np.empty((0, 5))
 
-<<<<<<< HEAD
         result = model(frame, imgsz=320, conf = 0.6)
-=======
-        result = model(frame, imgsz=640, conf = 0.6)
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 
         for info in result:
             boxes = info.boxes
@@ -121,7 +96,6 @@ def process_video():
 
                     if color == 'brown':
                         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
-<<<<<<< HEAD
                         cv2.putText(frame, f'{id} ken chet', (x1 + 8, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 2, cv2.LINE_AA)
                     
                     elif color == 'yellow':
@@ -132,15 +106,6 @@ def process_video():
                         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                         cv2.putText(frame, f'{id} ken trang', (x1 + 8, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 2, cv2.LINE_AA)
                         
-=======
-                    
-                    elif color == 'yellow':
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-                        
-                    elif color == 'white':
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
                     if line[0] < cx < line[2] and line[1] - 20 < cy < line[1] + 20:
                         cv2.line(frame, (line[0], line[1]), (line[2], line[3]), (0, 0, 255), 5)
 
@@ -165,15 +130,11 @@ def process_video():
                                 count_white.set(count_white.get() + 1)
                                 update_labels()
 
-<<<<<<< HEAD
             # cv2.putText(frame, f'{id} {objectdetect}', (x1 + 8, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 2, cv2.LINE_AA)
 
         # Tính và hiển thị độ sáng
         current_brightness = calculate_frame_brightness(frame)
         cv2.putText(frame, f'Brightness: {current_brightness:.1f}', (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1, cv2.LINE_AA)
-=======
-            cv2.putText(frame, f'{id} {objectdetect}', (x1 + 8, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 2, cv2.LINE_AA)
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 
         cv2.imshow("bao objects", frame)
 

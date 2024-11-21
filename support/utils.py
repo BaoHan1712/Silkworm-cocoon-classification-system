@@ -5,7 +5,6 @@ import numpy as np
 def create_color_mask(hsv, lower_color, upper_color):
     return cv2.inRange(hsv, lower_color, upper_color)
 
-<<<<<<< HEAD
 # Hàm tính trung bình độ sáng của vùng ROI
 def calculate_brightness(hsv_roi):
     return np.mean(hsv_roi[:, :, 2])
@@ -29,8 +28,6 @@ def auto_brown_mask(hsv_roi):
     brightness = calculate_brightness(hsv_roi)
     lower_brown, upper_brown = adjust_brown_threshold(brightness)
     return cv2.inRange(hsv_roi, lower_brown, upper_brown)
-=======
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 
 def brown_mask(hsv):
     lower_brown = np.array([0, 120, 50], dtype=np.uint8)
@@ -53,7 +50,6 @@ def format_number(event, entry_var):
     except ValueError:
         entry_var.set('')
 
-<<<<<<< HEAD
 #Tính toán độ sáng của frame        
 def calculate_frame_brightness(frame):
     # Chuyển frame sang không gian màu LAB
@@ -63,8 +59,5 @@ def calculate_frame_brightness(frame):
     # Tính trung bình độ sáng
     brightness = np.mean(l_channel)
     return brightness
-
-=======
->>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 
 
