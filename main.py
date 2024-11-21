@@ -1,6 +1,7 @@
 import cv2
 from support.sort import Sort
 from ultralytics import YOLO
+<<<<<<< HEAD
 from support.utils import  brown_mask , yellow_mask, calculate_brightness,adjust_brown_threshold
 import math
 import numpy as np
@@ -18,6 +19,23 @@ model = YOLO("model\ken_final.pt", task='detect')
 classnames = ['ken']
 
 tracker = Sort(max_age=50)
+=======
+from support.utils import  brown_mask , yellow_mask
+import math
+import numpy as np
+
+
+cap = cv2.VideoCapture(1)  
+
+model = YOLO("model\ken150.onnx", task='detect')
+
+classnames = []
+
+with open('class.txt', 'r') as f:
+    classnames = f.read().splitlines()
+
+tracker = Sort(max_age=30)
+>>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
 
 # Line
 line = [1, 300, 1080, 300]
@@ -74,7 +92,11 @@ while True:
             if roi.size > 0:
                 hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
                 
+<<<<<<< HEAD
                 mask_brown = auto_brown_mask(hsv)   
+=======
+                mask_brown = brown_mask(hsv)   
+>>>>>>> a4f7f890a220c2bf2ed4fdffcf31685bfd3930d2
                 mask_yellow = yellow_mask(hsv)
 
                 if id not in tracked_colors:
