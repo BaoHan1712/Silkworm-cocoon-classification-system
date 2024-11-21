@@ -1,0 +1,40 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Model files (nếu bạn không muốn up model)
+*.onnx
+
+
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Database
+*.db
+*.sqlite3
+
+# # Media files (nếu có)
+# media/
+# *.mp4
+# *.avi
+# *.mov
