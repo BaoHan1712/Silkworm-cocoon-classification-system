@@ -20,6 +20,7 @@ ENV/
 
 # Model files (nếu bạn không muốn up model)
 *.onnx
+*.engine
 
 
 
