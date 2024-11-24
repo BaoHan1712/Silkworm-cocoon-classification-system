@@ -7,14 +7,16 @@ def create_color_mask(hsv, lower_color, upper_color):
 
 # Hàm tính trung bình độ sáng của vùng ROI
 def calculate_brightness(hsv_roi):
-    return np.mean(hsv_roi[:, :, 2])
+    bright = np.mean(hsv_roi[:, :, 2])
+    # print("anh sang", bright)
+    return bright
 
 # Hàm tự động điều chỉnh ngưỡng màu nâu dựa trên độ sáng
 def adjust_brown_threshold(brightness):
-    if brightness < 50:  # Ánh sáng yếu
+    if brightness <= 50:  # Ánh sáng yếu
         lower_brown = np.array([0, 100, 30], dtype=np.uint8)
         upper_brown = np.array([60, 255, 140], dtype=np.uint8)
-    elif brightness > 200:  # Ánh sáng mạnh
+    elif brightness >= 200:  # Ánh sáng mạnh
         lower_brown = np.array([0, 130, 80], dtype=np.uint8)
         upper_brown = np.array([60, 255, 200], dtype=np.uint8)
     else:  # Ánh sáng trung bình
@@ -23,10 +25,27 @@ def adjust_brown_threshold(brightness):
     
     return lower_brown, upper_brown
 
-
 def auto_brown_mask(hsv_roi):
     brightness = calculate_brightness(hsv_roi)
     lower_brown, upper_brown = adjust_brown_threshold(brightness)
+    return cv2.inRange(hsv_roi, lower_brown, upper_brown)
+
+# Hàm tự động điều chỉnh ngưỡng màu vàng dựa trên độ sáng
+def adjust_yellow_threshold(brightness):
+    if brightness <= 50:  # Ánh sáng yếu
+        lower_yellow = np.array([20, 100, 30], dtype=np.uint8)  # Hue cho vàng, Saturation và Value thấp
+        upper_yellow = np.array([40, 255, 140], dtype=np.uint8)  # Hue cho vàng, bão hòa và sáng hơn
+    elif brightness >= 200:  # Ánh sáng mạnh
+        lower_yellow = np.array([20, 130, 80], dtype=np.uint8)  # Tăng độ bão hòa và sáng khi ánh sáng mạnh
+        upper_yellow = np.array([40, 255, 255], dtype=np.uint8)  # Tăng giá trị tối đa của sáng
+    else:  # Ánh sáng trung bình
+        lower_yellow = np.array([7, 7, 128], dtype=np.uint8)
+        upper_yellow = np.array([30, 255, 255], dtype=np.uint8)
+    return lower_yellow, upper_yellow
+
+def auto_yellow_mask(hsv_roi):
+    brightness = calculate_brightness(hsv_roi)
+    lower_brown, upper_brown = adjust_yellow_threshold(brightness)
     return cv2.inRange(hsv_roi, lower_brown, upper_brown)
 
 def brown_mask(hsv):
@@ -50,14 +69,5 @@ def format_number(event, entry_var):
     except ValueError:
         entry_var.set('')
 
-#Tính toán độ sáng của frame        
-def calculate_frame_brightness(frame):
-    # Chuyển frame sang không gian màu LAB
-    lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
-    # Tách kênh L (độ sáng)
-    l_channel = lab[:,:,0]
-    # Tính trung bình độ sáng
-    brightness = np.mean(l_channel)
-    return brightness
 
 

@@ -1,7 +1,7 @@
 import cv2
 from support.sort import Sort
 from ultralytics import YOLO
-from support.utils import brown_mask, yellow_mask, format_number, calculate_frame_brightness
+from support.utils import adjust_yellow_threshold, adjust_brown_threshold, format_number, calculate_brightness
 import math
 import numpy as np
 import serial
@@ -81,8 +81,8 @@ def process_video():
                 if roi.size > 0:
                     hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
 
-                    mask_brown = brown_mask(hsv)   
-                    mask_yellow = yellow_mask(hsv)
+                    mask_brown = adjust_brown_threshold(hsv)   
+                    mask_yellow = adjust_yellow_threshold(hsv)
 
                     if id not in tracked_colors:
                         if cv2.countNonZero(mask_brown) > 0:
@@ -133,7 +133,7 @@ def process_video():
             # cv2.putText(frame, f'{id} {objectdetect}', (x1 + 8, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 2, cv2.LINE_AA)
 
         # Tính và hiển thị độ sáng
-        current_brightness = calculate_frame_brightness(frame)
+        current_brightness = calculate_brightness(hsv)
         cv2.putText(frame, f'Brightness: {current_brightness:.1f}', (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1, cv2.LINE_AA)
 
         cv2.imshow("bao objects", frame)
