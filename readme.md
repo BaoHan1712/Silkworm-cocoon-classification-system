@@ -129,3 +129,7 @@ Color->>Arduino: Classify color
 Arduino->>Arduino: Control servos
 Color->>Interface: Update statistics
 ```
+## 📝 License
+MIT License BaoHan1712
+------
+No other individuals or organizations are involved
